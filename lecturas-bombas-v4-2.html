@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0d1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Corte de Bombas — GrupoRVQ</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Mulish:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b27;
+  --card:      #1a2133;
+  --card2:     #1f2840;
+  --border:    #263049;
+  --border2:   #2e3a55;
+  --super:     #f5c400;
+  --regular:   #00d4aa;
+  --diesel:    #ff7043;
+  --text:      #dce8ff;
+  --muted:     #4d6080;
+  --muted2:    #6b82a8;
+  --green:     #00e676;
+  --accent:    #4d9fff;
+  --danger:    #ff4d6d;
+  --glow-s:    rgba(245,196,0,0.15);
+  --glow-r:    rgba(0,212,170,0.15);
+  --glow-d:    rgba(255,112,67,0.15);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Mulish',sans-serif;overflow-x:hidden;}
+
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 35% at 20% 0%, rgba(77,159,255,0.06) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 25% at 80% 100%, rgba(0,230,118,0.05) 0%,transparent 60%);
+}
+
+/* ── HEADER ── */
+header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(13,17,23,0.95);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;
+}
+.brand{display:flex;flex-direction:column;}
+.brand-main{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700;letter-spacing:3px;color:var(--accent);text-transform:uppercase;}
+.brand-sub{font-size:9px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-top:1px;}
+.header-actions{display:flex;gap:8px;align-items:center;}
+
+/* ── SHIFT SELECTOR ── */
+.shift-wrap{display:flex;gap:4px;}
+.shift-btn{
+  font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;letter-spacing:1px;
+  padding:5px 10px;border-radius:4px;border:1px solid var(--border);
+  background:var(--card);color:var(--muted);cursor:pointer;transition:all .2s;
+}
+.shift-btn.active-1{border-color:var(--accent);color:var(--accent);background:rgba(77,159,255,0.1);}
+.shift-btn.active-2{border-color:var(--green);color:var(--green);background:rgba(0,230,118,0.1);}
+.shift-btn.active-3{border-color:var(--diesel);color:var(--diesel);background:rgba(255,112,67,0.1);}
+
+/* ── ICON BTNS ── */
+.icon-btn{
+  font-size:16px;background:var(--card);border:1px solid var(--border);
+  border-radius:5px;padding:6px 10px;cursor:pointer;color:var(--muted2);
+  transition:all .2s;
+}
+.icon-btn:hover{color:var(--text);border-color:var(--border2);}
+
+/* ── MAIN ── */
+main{padding:12px 12px 90px;position:relative;z-index:1;}
+
+.date-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 2px 14px;
+}
+.date-txt{font-size:12px;color:var(--muted2);letter-spacing:1px;}
+.prices-quick{display:flex;gap:8px;}
+.price-chip{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  padding:3px 8px;border-radius:3px;
+  display:flex;gap:5px;align-items:center;cursor:pointer;
+}
+.price-chip.s{background:rgba(245,196,0,0.1);color:var(--super);border:1px solid rgba(245,196,0,0.2);}
+.price-chip.r{background:rgba(0,212,170,0.1);color:var(--regular);border:1px solid rgba(0,212,170,0.2);}
+.price-chip.d{background:rgba(255,112,67,0.1);color:var(--diesel);border:1px solid rgba(255,112,67,0.2);}
+
+/* ── PAIR CARD ── */
+.pair-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px;
+  margin-bottom:12px;
+  overflow:hidden;
+}
+.pair-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 12px;
+  background:var(--card2);
+  border-bottom:1px solid var(--border);
+}
+.pair-label{
+  font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;
+  letter-spacing:2px;color:var(--text);
+}
+.pair-gal{
+  font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green);
+  background:rgba(0,230,118,0.08);padding:3px 10px;border-radius:3px;
+  border:1px solid rgba(0,230,118,0.15);
+}
+
+/* ── PUMP HALVES ── */
+.pump-halves{display:grid;grid-template-columns:1fr 1fr;}
+.pump-half{padding:10px 10px;}
+.pump-half:first-child{border-right:1px solid var(--border);}
+.pump-half-label{
+  font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;
+  letter-spacing:2px;color:var(--muted2);margin-bottom:8px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.pump-num{font-size:15px;color:var(--text);}
+
+/* ── PRODUCT ROW ── */
+.prod-row{
+  display:grid;grid-template-columns:28px 1fr 72px;
+  align-items:center;gap:6px;
+  margin-bottom:6px;
+}
+.prod-dot{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
+  margin:0 auto;
+}
+.dot-s{background:var(--super);box-shadow:0 0 6px var(--super);}
+.dot-r{background:var(--regular);box-shadow:0 0 6px var(--regular);}
+.dot-d{background:var(--diesel);box-shadow:0 0 6px var(--diesel);}
+
+.prod-input-wrap{position:relative;}
+.prod-input{
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  width:100%;padding:5px 6px 5px 22px;
+  background:rgba(0,0,0,0.3);
+  border:1px solid var(--border);
+  border-radius:4px;
+  color:var(--text);
+  -webkit-appearance:none;
+  transition:border-color .2s;
+  min-height:42px;
+  -webkit-tap-highlight-color:transparent;
+}
+.prod-input:focus{outline:none;}
+.prod-input.s:focus{border-color:var(--super);box-shadow:0 0 0 2px rgba(245,196,0,0.1);}
+.prod-input.r:focus{border-color:var(--regular);box-shadow:0 0 0 2px rgba(0,212,170,0.1);}
+.prod-input.d:focus{border-color:var(--diesel);box-shadow:0 0 0 2px rgba(255,112,67,0.1);}
+.prod-input::placeholder{color:var(--muted);opacity:.6;font-size:11px;}
+.dollar-sign{
+  position:absolute;left:7px;top:50%;transform:translateY(-50%);
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  pointer-events:none;
+}
+
+.gal-result{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--muted2);text-align:right;
+  white-space:nowrap;
+}
+.gal-result.filled{color:var(--green);}
+
+/* ── TOTALS ROW ── */
+.totals-row{
+  display:flex;gap:0;border-top:1px solid var(--border);
+}
+.total-cell{
+  flex:1;padding:8px 10px;text-align:center;
+  border-right:1px solid var(--border);
+}
+.total-cell:last-child{border-right:none;}
+.total-cell-label{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.total-cell-val{
+  font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text);
+  margin-top:2px;
+}
+
+/* ── BOTTOM BAR ── */
+.bottom-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:rgba(13,17,23,0.97);backdrop-filter:blur(14px);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;gap:10px;
+}
+.totals-quick{display:flex;gap:14px;}
+.tq-item{display:flex;flex-direction:column;align-items:center;}
+.tq-label{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.tq-val{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:600;color:var(--accent);margin-top:1px;}
+.tq-val.money{color:var(--green);}
+
+.save-btn{
+  font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:11px 20px;border-radius:6px;
+  border:1px solid var(--green);
+  background:rgba(0,230,118,0.1);color:var(--green);
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.save-btn:active{background:rgba(0,230,118,0.22);}
+
+.ctp-btn{
+  font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:11px 14px;border-radius:6px;
+  border:1px solid var(--accent);
+  background:rgba(77,159,255,0.1);color:var(--accent);
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.ctp-btn:active{background:rgba(77,159,255,0.22);}
+.ctp-btn.working{border-color:var(--super);color:var(--super);background:rgba(245,196,0,0.1);animation:ctpPulse 1s infinite;}
+@keyframes ctpPulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* ── MODAL ── */
+.overlay{
+  display:none;position:fixed;inset:0;z-index:300;
+  background:rgba(0,0,0,0.75);backdrop-filter:blur(5px);
+  align-items:flex-end;
+}
+.overlay.open{display:flex;}
+.modal{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:14px 14px 0 0;
+  width:100%;max-height:85vh;overflow-y:auto;
+  padding:18px 14px 32px;
+  animation:slideUp .22s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:16px;
+}
+.modal-title{
+  font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;
+  letter-spacing:2px;color:var(--accent);text-transform:uppercase;
+}
+.modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:2px 6px;}
+
+/* Config grid */
+.cfg-section-label{
+  font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;
+  margin:14px 0 8px;
+}
+.prices-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px;}
+.price-field{display:flex;flex-direction:column;gap:4px;}
+.price-field label{font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.price-field input{
+  font-family:'JetBrains Mono',monospace;font-size:14px;
+  background:rgba(0,0,0,0.3);border:1px solid var(--border);
+  border-radius:5px;color:var(--text);padding:7px 9px;
+}
+.price-field input:focus{outline:none;border-color:var(--accent);}
+.price-field.super input:focus{border-color:var(--super);}
+.price-field.regular input:focus{border-color:var(--regular);}
+.price-field.diesel input:focus{border-color:var(--diesel);}
+
+/* Initial readings */
+.init-pair{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:7px;margin-bottom:10px;overflow:hidden;
+}
+.init-pair-head{
+  font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:2px;padding:7px 10px;
+  background:var(--card2);border-bottom:1px solid var(--border);
+  color:var(--muted2);
+}
+.init-halves{display:grid;grid-template-columns:1fr 1fr;}
+.init-half{padding:8px 10px;}
+.init-half:first-child{border-right:1px solid var(--border);}
+.init-half-label{
+  font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;
+  letter-spacing:1px;color:var(--muted2);margin-bottom:6px;
+}
+.init-prod-row{
+  display:grid;grid-template-columns:22px 1fr;
+  gap:5px;align-items:center;margin-bottom:5px;
+}
+.init-prod-dot{width:7px;height:7px;border-radius:50%;}
+.init-input{
+  font-family:'JetBrains Mono',monospace;font-size:12px;
+  background:rgba(0,0,0,0.3);border:1px solid var(--border);
+  border-radius:4px;color:var(--text);padding:4px 7px;width:100%;
+}
+.init-input:focus{outline:none;border-color:var(--accent);}
+
+/* History */
+.hist-entry{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:7px;padding:10px 12px;margin-bottom:8px;
+}
+.hist-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.hist-date{font-size:11px;color:var(--muted2);}
+.hist-turno{
+  font-family:'Rajdhani',sans-serif;font-size:12px;letter-spacing:1px;
+  padding:2px 8px;border-radius:3px;
+}
+.tc-1{background:rgba(77,159,255,0.1);color:var(--accent);}
+.tc-2{background:rgba(0,230,118,0.1);color:var(--green);}
+.tc-3{background:rgba(255,112,67,0.1);color:var(--diesel);}
+.hist-nums{display:flex;gap:16px;}
+.hist-num{display:flex;flex-direction:column;}
+.hist-num-label{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+.hist-num-val{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text);}
+.hist-del{background:none;border:none;color:var(--danger);cursor:pointer;font-size:14px;padding:2px 6px;}
+.empty-msg{text-align:center;color:var(--muted);padding:30px;font-size:13px;}
+
+/* Modal action btn */
+.modal-action-btn{
+  width:100%;margin-top:14px;
+  font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:12px;border-radius:6px;
+  border:1px solid var(--accent);background:rgba(77,159,255,0.1);
+  color:var(--accent);cursor:pointer;transition:all .2s;
+}
+.modal-action-btn:active{background:rgba(77,159,255,0.2);}
+
+/* Toast */
+.toast{
+  position:fixed;top:66px;left:50%;transform:translateX(-50%) translateY(-10px);
+  background:var(--green);color:#000;
+  font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;
+  padding:8px 20px;border-radius:5px;
+  opacity:0;transition:all .28s;z-index:500;pointer-events:none;white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.error{background:var(--danger);color:#fff;}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — TABLET  (max 900px)
+═══════════════════════════════════════ */
+@media(max-width:900px){
+  header{padding:10px 14px;}
+  .brand-main{font-size:16px;}
+  .pump-card{margin-bottom:10px;}
+  .section-bar{padding:6px 12px;}
+  .bottom-bar{padding:10px 14px;gap:8px;}
+  .save-btn,.ctp-btn{padding:10px 14px;font-size:13px;}
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — MÓVIL  (max 600px)
+═══════════════════════════════════════ */
+@media(max-width:600px){
+
+  /* Header */
+  header{padding:10px 12px;gap:8px;}
+  .brand-main{font-size:14px;letter-spacing:2px;}
+  .brand-sub{font-size:8px;letter-spacing:3px;}
+  .header-actions{gap:6px;}
+  .shift-wrap button{padding:5px 8px;font-size:11px;}
+
+  /* Barra de precios */
+  .prices-bar{padding:6px 12px;}
+  .prices-quick{gap:6px;flex-wrap:wrap;}
+  .price-chip{font-size:11px;padding:3px 7px;}
+
+  /* Cards de bomba */
+  .pump-card{border-radius:8px;margin-bottom:8px;}
+  .pump-header{padding:8px 12px;}
+  .pump-label{font-size:14px;}
+  .pump-halves{grid-template-columns:1fr;}  /* una columna en móvil */
+  .pump-half{padding:10px 12px;}
+  .half-label{font-size:9px;letter-spacing:2px;margin-bottom:8px;}
+  .product-row{grid-template-columns:22px 1fr 66px;gap:6px;margin-bottom:6px;}
+  .prod-dot{width:7px;height:7px;}
+  .prod-name{font-size:12px;}
+  .prod-input{font-size:13px;padding:6px 8px;}
+
+  /* Subtotales de half */
+  .half-footer{padding:6px 12px;}
+  .hf-label{font-size:9px;}
+  .hf-val{font-size:13px;}
+
+  /* Tabs del medio */
+  .tabs-row{padding:0 12px;}
+  .tab-btn{font-size:11px;padding:8px 10px;letter-spacing:1px;}
+
+  /* Totales */
+  .totals-bar{padding:8px 12px;}
+  .totals-quick{gap:10px;flex-wrap:wrap;}
+  .tq-label{font-size:8px;}
+  .tq-val{font-size:15px;}
+
+  /* Bottom bar — stack vertical en pantallas muy pequeñas */
+  .bottom-bar{
+    padding:10px 12px;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .save-btn,.ctp-btn{
+    flex:1;min-width:120px;
+    padding:12px 10px;
+    font-size:13px;
+    letter-spacing:1px;
+    text-align:center;
+  }
+
+  /* Modal — ocupa más pantalla en móvil */
+  .modal{
+    max-height:92vh;
+    border-radius:12px 12px 0 0;
+    padding:16px 14px 24px;
+  }
+  .modal-title{font-size:14px;}
+  .modal-action-btn{padding:14px;font-size:14px;}
+
+  /* Toast más compacto */
+  .toast{font-size:12px;padding:7px 16px;}
+
+  /* Sección init */
+  .init-halves{grid-template-columns:1fr;}
+
+  /* Grid precios config */
+  .prices-grid{grid-template-columns:1fr 1fr;}
+}
+
+/* ═══════════════════════════════════════
+   MÓVIL MUY PEQUEÑO  (max 380px)
+═══════════════════════════════════════ */
+@media(max-width:380px){
+  .pump-halves{grid-template-columns:1fr;}
+  .product-row{grid-template-columns:18px 1fr 60px;}
+  .prod-input{font-size:12px;padding:5px 7px;}
+  .tq-val{font-size:13px;}
+  .save-btn,.ctp-btn{font-size:12px;padding:11px 8px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="brand-main">Corte de Bombas</span>
+    <span class="brand-sub">GrupoRVQ</span>
+  </div>
+  <div class="header-actions">
+    <div class="shift-wrap" id="shiftWrap"></div>
+    <button class="icon-btn" onclick="openHistory()" title="Historial">📋</button>
+    <button class="icon-btn" onclick="openConfig()" title="Configuración">⚙</button>
+  </div>
+</header>
+
+<main>
+  <div class="date-row">
+    <span class="date-txt" id="dateLabel"></span>
+    <div class="prices-quick" id="pricesQuick"></div>
+  </div>
+  <div id="pumpPairs"></div>
+</main>
+
+<div class="bottom-bar">
+  <div class="totals-quick">
+    <div class="tq-item">
+      <span class="tq-label">Galones</span>
+      <span class="tq-val" id="footGal">0.000</span>
+    </div>
+    <div class="tq-item">
+      <span class="tq-label">Total $</span>
+      <span class="tq-val money" id="footMon">$0.00</span>
+    </div>
+  </div>
+  <button class="save-btn" onclick="saveShift()">Guardar Corte</button>
+  <button class="ctp-btn" id="ctpBtn" onclick="openCtpModal()" title="Enviar al CTP">CTP ⇑</button>
+</div>
+
+<!-- CONFIG MODAL -->
+<div class="overlay" id="configOverlay">
+<div class="modal">
+  <div class="modal-head">
+    <span class="modal-title">Configuración</span>
+    <button class="modal-close" onclick="closeOverlay('configOverlay')">✕</button>
+  </div>
+
+  <div class="cfg-section-label">Precios por galón</div>
+  <div class="prices-grid">
+    <div class="price-field super">
+      <label>Super</label>
+      <input type="number" step="0.001" id="priceSuper" inputmode="decimal">
+    </div>
+    <div class="price-field regular">
+      <label>Regular</label>
+      <input type="number" step="0.001" id="priceRegular" inputmode="decimal">
+    </div>
+    <div class="price-field diesel">
+      <label>Diesel</label>
+      <input type="number" step="0.001" id="priceDiesel" inputmode="decimal">
+    </div>
+  </div>
+
+  <div class="cfg-section-label">Lecturas iniciales (totalizadores)</div>
+  <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">
+    Ingresa las lecturas base de cada cara. A partir de aquí se calculan los consumos por turno.
+  </div>
+  <div id="initGrid"></div>
+
+  <button class="modal-action-btn" onclick="saveConfig()">Guardar configuración</button>
+</div>
+</div>
+
+<!-- HISTORY MODAL -->
+<div class="overlay" id="historyOverlay">
+<div class="modal">
+  <div class="modal-head">
+    <span class="modal-title">Historial de Cortes</span>
+    <button class="modal-close" onclick="closeOverlay('historyOverlay')">✕</button>
+  </div>
+  <div id="histList"></div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- CTP MODAL -->
+<div class="overlay" id="ctpOverlay">
+<div class="modal">
+  <div class="modal-head">
+    <span class="modal-title">Enviar al CTP</span>
+    <button class="modal-close" onclick="closeOverlay('ctpOverlay')">✕</button>
+  </div>
+
+  <!-- Login button — siempre visible -->
+  <a href="http://192.168.176.2:81/CTP/login" target="_blank" style="display:block;text-align:center;margin-bottom:14px;">
+    <button style="width:100%;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:10px;border-radius:6px;border:1px solid var(--border2);background:var(--card2);color:var(--muted2);cursor:pointer;">
+      🔑 Abrir Login CTP
+    </button>
+  </a>
+
+  <!-- Estado de detección automática -->
+  <div id="ctpDetectBox" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:12px;font-family:'JetBrains Mono',monospace;font-size:11px;">
+    <div style="color:var(--muted);margin-bottom:6px;font-size:9px;letter-spacing:2px;text-transform:uppercase;">Turno Detectado</div>
+    <div id="ctpDetectInfo" style="color:var(--muted2);">Presiona "Detectar" para buscar el turno activo de hoy.</div>
+  </div>
+  <button onclick="ctpDetectar()" id="ctpDetectBtn"
+    style="width:100%;margin-bottom:12px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:9px;border-radius:6px;border:1px solid var(--border2);background:var(--card2);color:var(--muted2);cursor:pointer;">
+    🔍 Detectar Turno Activo
+  </button>
+
+  <!-- Preview galones -->
+  <div style="font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Galones a enviar</div>
+  <div id="ctpPreview" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:12px;max-height:180px;overflow-y:auto;"></div>
+
+  <!-- Log -->
+  <div id="ctpLog" style="display:none;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:5px;padding:10px;margin-bottom:12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted2);max-height:140px;overflow-y:auto;white-space:pre-wrap;"></div>
+
+  <button class="modal-action-btn" id="ctpSendBtn" onclick="ctpEnviar()" disabled
+    style="opacity:0.5;">⇑ Actualizar Lecturas en CTP</button>
+  <div id="ctpStatus" style="text-align:center;margin-top:10px;font-size:12px;color:var(--muted2);"></div>
+</div>
+</div>
+
+<script>
+// ─── DATA MODEL ─────────────────────────────────────────────────────────
+// 7 pairs → 14 pumps. Odd = cara A (higher number), Even = cara B (lower number)
+// Pair index 0..6. Pair 0 = bombas 1-2, pair 1 = bombas 3-4, ...
+// Each half (A=even/higher, B=odd/lower) has 3 products: S, R, D
+// "venta" (sale $) is entered → galones = venta / price
+// Stored: baseline galones per half per product (totalizador)
+// Each shift: enter ventas ($) per product per half, app calculates galones consumed
+
+const PAIRS = 7;
+const PRODUCTS = ['S','R','D'];
+const PROD_LABEL = {S:'Super',R:'Regular',D:'Diesel'};
+const PROD_DOT = {S:'dot-s',R:'dot-r',D:'dot-d'};
+const PROD_CLASS = {S:'s',R:'r',D:'d'};
+const SHIFT_LABELS = ['T1','T2','T3'];
+
+// Defaults
+const DEFAULT_PRICES = {S:4.999, R:4.499, D:3.899};
+
+// State keys in localStorage
+const KEY_PRICES   = 'rvq2_prices';
+const KEY_BASELINE = 'rvq2_baseline'; // { "p0_A_S": 12345.678, ... } galones acumulados
+const KEY_HISTORY  = 'rvq2_history';
+
+let prices   = JSON.parse(localStorage.getItem(KEY_PRICES)   || 'null') || {...DEFAULT_PRICES};
+let baseline = JSON.parse(localStorage.getItem(KEY_BASELINE) || 'null') || {};
+let history  = JSON.parse(localStorage.getItem(KEY_HISTORY)  || '[]');
+let currentShift = 1;
+
+// Current form ventas: { "p0_A_S": "45.50", ... }
+let ventas = {};
+
+// ─── INIT ────────────────────────────────────────────────────────────────
+function init(){
+  updateDate();
+  renderShiftBtns();
+  renderPricesQuick();
+  renderPairs();
+  updateFooter();
+}
+
+function updateDate(){
+  const now = new Date();
+  document.getElementById('dateLabel').textContent =
+    now.toLocaleDateString('es-SV',{weekday:'long',day:'2-digit',month:'long'});
+}
+
+// ─── SHIFT BUTTONS ───────────────────────────────────────────────────────
+function renderShiftBtns(){
+  const wrap = document.getElementById('shiftWrap');
+  wrap.innerHTML = SHIFT_LABELS.map((l,i)=>`
+    <button class="shift-btn ${currentShift===i+1?'active-'+(i+1):''}"
+      onclick="setShift(${i+1})">${l}</button>
+  `).join('');
+}
+function setShift(n){ currentShift=n; renderShiftBtns(); }
+
+// ─── PRICES QUICK ────────────────────────────────────────────────────────
+function renderPricesQuick(){
+  document.getElementById('pricesQuick').innerHTML = PRODUCTS.map(p=>`
+    <div class="price-chip ${PROD_CLASS[p]}" onclick="openConfig()">
+      <span>${PROD_LABEL[p][0]}</span>
+      <span>$${prices[p].toFixed(3)}</span>
+    </div>
+  `).join('');
+}
+
+// ─── RENDER PAIRS ────────────────────────────────────────────────────────
+function renderPairs(){
+  const container = document.getElementById('pumpPairs');
+  container.innerHTML = '';
+  for(let pi=0; pi<PAIRS; pi++){
+    const numA = pi*2+2; // even = higher displayed first
+    const numB = pi*2+1;
+    const pairGal = calcPairGal(pi);
+    container.innerHTML += `
+    <div class="pair-card">
+      <div class="pair-header">
+        <span class="pair-label">PAR ${numB}–${numA}</span>
+        <span class="pair-gal" id="pair_gal_${pi}">${pairGal>0?pairGal.toFixed(3)+' gal':'—'}</span>
+      </div>
+      <div class="pump-halves">
+        ${renderHalf(pi,'A',numA)}
+        ${renderHalf(pi,'B',numB)}
+      </div>
+      <div class="totals-row">
+        ${renderPairTotals(pi)}
+      </div>
+    </div>`;
+  }
+}
+
+function renderHalf(pi, side, num){
+  return `
+  <div class="pump-half">
+    <div class="pump-half-label">
+      <span>Cara</span>
+      <span class="pump-num">Bomba ${num}</span>
+    </div>
+    ${PRODUCTS.map(p => renderProdRow(pi, side, p)).join('')}
+  </div>`;
+}
+
+function renderProdRow(pi, side, p){
+  const key = `p${pi}_${side}_${p}`;
+  const val = ventas[key] || '';
+  const gal = val ? (parseFloat(val)/prices[p]) : null;
+  return `
+  <div class="prod-row">
+    <div class="prod-dot ${PROD_DOT[p]}"></div>
+    <div class="prod-input-wrap">
+      <span class="dollar-sign">$</span>
+      <input class="prod-input ${PROD_CLASS[p]}"
+        type="number" inputmode="decimal" step="0.01"
+        placeholder="${PROD_LABEL[p]}"
+        value="${val}"
+        oninput="setVenta('${key}',this.value,${pi})"
+        id="inp_${key}">
+    </div>
+    <span class="gal-result ${gal?'filled':''}" id="gal_${key}">
+      ${gal ? gal.toFixed(3)+'g' : '—'}
+    </span>
+  </div>`;
+}
+
+function renderPairTotals(pi){
+  let totalGal=0, totalMon=0;
+  ['A','B'].forEach(side=>{
+    PRODUCTS.forEach(p=>{
+      const key=`p${pi}_${side}_${p}`;
+      const v=parseFloat(ventas[key]||0);
+      totalMon+=v;
+      if(v) totalGal+=v/prices[p];
+    });
+  });
+  return `
+    <div class="total-cell">
+      <div class="total-cell-label">Galones par</div>
+      <div class="total-cell-val">${totalGal>0?totalGal.toFixed(3):'—'}</div>
+    </div>
+    <div class="total-cell">
+      <div class="total-cell-label">Venta par</div>
+      <div class="total-cell-val">${totalMon>0?'$'+totalMon.toFixed(2):'—'}</div>
+    </div>`;
+}
+
+function calcPairGal(pi){
+  let g=0;
+  ['A','B'].forEach(side=>PRODUCTS.forEach(p=>{
+    const v=parseFloat(ventas[`p${pi}_${side}_${p}`]||0);
+    if(v) g+=v/prices[p];
+  }));
+  return g;
+}
+
+// ─── INPUT HANDLER ───────────────────────────────────────────────────────
+function setVenta(key, val, pi){
+  ventas[key] = val;
+  // Update gal result inline
+  const p = key.split('_')[2];
+  const gal = val ? parseFloat(val)/prices[p] : null;
+  const galEl = document.getElementById('gal_'+key);
+  if(galEl){
+    galEl.textContent = gal ? gal.toFixed(3)+'g' : '—';
+    galEl.className = 'gal-result '+(gal?'filled':'');
+  }
+  // Update pair gal + totals row
+  const pairGalEl = document.getElementById('pair_gal_'+pi);
+  const pairGal = calcPairGal(pi);
+  if(pairGalEl) pairGalEl.textContent = pairGal>0 ? pairGal.toFixed(3)+' gal' : '—';
+  // Re-render totals row only
+  const card = pairGalEl?.closest('.pair-card');
+  if(card){
+    const tr = card.querySelector('.totals-row');
+    if(tr) tr.innerHTML = renderPairTotals(pi);
+  }
+  updateFooter();
+}
+
+// ─── FOOTER TOTALS ───────────────────────────────────────────────────────
+function updateFooter(){
+  let totalGal=0, totalMon=0;
+  for(let pi=0;pi<PAIRS;pi++){
+    ['A','B'].forEach(side=>{
+      PRODUCTS.forEach(p=>{
+        const v=parseFloat(ventas[`p${pi}_${side}_${p}`]||0);
+        totalMon+=v;
+        if(v) totalGal+=v/prices[p];
+      });
+    });
+  }
+  document.getElementById('footGal').textContent = totalGal.toFixed(3);
+  document.getElementById('footMon').textContent = '$'+totalMon.toFixed(2);
+}
+
+// ─── SAVE SHIFT ──────────────────────────────────────────────────────────
+function saveShift(){
+  const anyFilled = Object.values(ventas).some(v=>v && parseFloat(v)>0);
+  if(!anyFilled){ showToast('Ingresa al menos una venta','error'); return; }
+
+  const now = new Date();
+  let totalGal=0, totalMon=0;
+  const detail = {};
+
+  for(let pi=0;pi<PAIRS;pi++){
+    ['A','B'].forEach(side=>{
+      PRODUCTS.forEach(p=>{
+        const key=`p${pi}_${side}_${p}`;
+        const v=parseFloat(ventas[key]||0);
+        const g=v?v/prices[p]:0;
+        totalMon+=v; totalGal+=g;
+        detail[key]={venta:v, galones:g};
+        // Advance baseline
+        if(g && baseline[key]!==undefined) baseline[key]+=g;
+        else if(g) baseline[key]=(baseline[key]||0)+g;
+      });
+    });
+  }
+
+  // Save baseline advance
+  localStorage.setItem(KEY_BASELINE, JSON.stringify(baseline));
+
+  const entry = {
+    id: Date.now(),
+    date: now.toLocaleDateString('es-SV'),
+    time: now.toLocaleTimeString('es-SV',{hour:'2-digit',minute:'2-digit'}),
+    shift: currentShift,
+    totalGal, totalMon,
+    prices:{...prices},
+    detail
+  };
+  history.unshift(entry);
+  localStorage.setItem(KEY_HISTORY, JSON.stringify(history));
+
+  showToast('✓ Corte guardado');
+  ventas = {};
+  renderPairs();
+  updateFooter();
+}
+
+// ─── CONFIG MODAL ────────────────────────────────────────────────────────
+function openConfig(){
+  // Fill prices
+  document.getElementById('priceSuper').value   = prices.S;
+  document.getElementById('priceRegular').value = prices.R;
+  document.getElementById('priceDiesel').value  = prices.D;
+
+  // Build init grid
+  const grid = document.getElementById('initGrid');
+  grid.innerHTML = '';
+  for(let pi=0;pi<PAIRS;pi++){
+    const numA=pi*2+2, numB=pi*2+1;
+    grid.innerHTML += `
+    <div class="init-pair">
+      <div class="init-pair-head">PAR ${numB}–${numA}</div>
+      <div class="init-halves">
+        ${initHalfHTML(pi,'A',numA)}
+        ${initHalfHTML(pi,'B',numB)}
+      </div>
+    </div>`;
+  }
+  document.getElementById('configOverlay').classList.add('open');
+}
+
+function initHalfHTML(pi, side, num){
+  return `
+  <div class="init-half">
+    <div class="init-half-label">Bomba ${num}</div>
+    ${PRODUCTS.map(p=>{
+      const key=`p${pi}_${side}_${p}`;
+      const val = baseline[key]!==undefined ? parseFloat(baseline[key]).toFixed(3) : '';
+      return `
+      <div class="init-prod-row">
+        <div class="init-prod-dot ${PROD_DOT[p]}" style="background:${p==='S'?'var(--super)':p==='R'?'var(--regular)':'var(--diesel)'}"></div>
+        <input class="init-input" type="number" inputmode="decimal" step="0.001"
+          id="init_${key}" value="${val}" placeholder="${PROD_LABEL[p]}">
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function saveConfig(){
+  prices.S = parseFloat(document.getElementById('priceSuper').value)   || DEFAULT_PRICES.S;
+  prices.R = parseFloat(document.getElementById('priceRegular').value) || DEFAULT_PRICES.R;
+  prices.D = parseFloat(document.getElementById('priceDiesel').value)  || DEFAULT_PRICES.D;
+  localStorage.setItem(KEY_PRICES, JSON.stringify(prices));
+
+  for(let pi=0;pi<PAIRS;pi++){
+    ['A','B'].forEach(side=>{
+      PRODUCTS.forEach(p=>{
+        const key=`p${pi}_${side}_${p}`;
+        const inp=document.getElementById('init_'+key);
+        if(inp && inp.value!=='') baseline[key]=parseFloat(inp.value)||0;
+      });
+    });
+  }
+  localStorage.setItem(KEY_BASELINE, JSON.stringify(baseline));
+
+  closeOverlay('configOverlay');
+  renderPricesQuick();
+  renderPairs();
+  updateFooter();
+  showToast('✓ Configuración guardada');
+}
+
+// ─── HISTORY MODAL ───────────────────────────────────────────────────────
+function openHistory(){
+  const list = document.getElementById('histList');
+  if(!history.length){
+    list.innerHTML='<div class="empty-msg">No hay cortes guardados aún.</div>';
+  } else {
+    list.innerHTML = history.map(e=>`
+      <div class="hist-entry">
+        <div class="hist-meta">
+          <span class="hist-date">${e.date} · ${e.time}</span>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span class="hist-turno tc-${e.shift}">Turno ${e.shift}</span>
+            <button class="hist-del" onclick="deleteEntry(${e.id})">✕</button>
+          </div>
+        </div>
+        <div class="hist-nums">
+          <div class="hist-num">
+            <span class="hist-num-label">Galones</span>
+            <span class="hist-num-val">${e.totalGal.toFixed(3)}</span>
+          </div>
+          <div class="hist-num">
+            <span class="hist-num-label">Venta $</span>
+            <span class="hist-num-val">$${e.totalMon.toFixed(2)}</span>
+          </div>
+          <div class="hist-num">
+            <span class="hist-num-label">S $/gal</span>
+            <span class="hist-num-val">$${e.prices?.S?.toFixed(3)||'—'}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('historyOverlay').classList.add('open');
+}
+
+function deleteEntry(id){
+  if(!confirm('¿Eliminar este corte?')) return;
+  history=history.filter(e=>e.id!==id);
+  localStorage.setItem(KEY_HISTORY, JSON.stringify(history));
+  openHistory();
+}
+
+// ─── UTILS ───────────────────────────────────────────────────────────────
+function closeOverlay(id){ document.getElementById(id).classList.remove('open'); }
+
+function showToast(msg, type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast '+(type==='error'?'error':'')+' show';
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+document.querySelectorAll('.overlay').forEach(el=>{
+  el.addEventListener('click',e=>{ if(e.target===el) el.classList.remove('open'); });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ─── MÓDULO CTP v2 — API DIRECTA (sin manipulación DOM) ──────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// CÓMO FUNCIONA:
+// 1. Usuario abre el CTP manualmente en otra pestaña y se loguea
+// 2. Navega a LECTURAS DE BOMBA (la URL queda guardada con los parámetros)
+// 3. Aquí pega esa URL — el sistema extrae: empresa, estacion, caja, dia, turno
+// 4. Hace fetch a la misma URL del CTP para leer los inputs actuales (FINAL, etc.)
+// 5. Calcula nuevoFinal = finalActual + galonesVendidos
+// 6. POST directo a `?accion=guardarLecturas` con el JSON de lecturas
+//
+// IDs en DOM del CTP:
+//   final-{TANQUE}-{BOMBA}     → input editable LECTURA_FINAL
+//   inicial-{TANQUE}-{BOMBA}   → td readonly LECTURA_INICIAL
+//   calibra-{TANQUE}-{BOMBA}   → input CALIBRACION
+//   traslado-{TANQUE}-{BOMBA}  → input TRASLADO
+//   precio-{TANQUE}-{BOMBA}    → td PRECIO_USD_GALON
+//
+// MAPEO producto → tanque:
+//   Super   (S) → TANQUE 1
+//   Regular (R) → TANQUE 2
+//   Diesel  (D) → TANQUE 3
+//   Bombas 13-14 → solo Diesel → TANQUE 1 (o el que exista)
+// ═══════════════════════════════════════════════════════════════════════════
+
+// MAPEO: pairIndex + side → número de bomba CTP (1-14)
+// Par 0: bombaA=2, bombaB=1 | Par 1: bombaA=4, bombaB=3 | ...
+// Bomba 13 y 14 = SOLO DIESEL (tanque único)
+//
+// TANQUE en CTP por producto:
+//   S (Super)   → TANQUE 1
+//   R (Regular) → TANQUE 2
+//   D (Diesel)  → TANQUE 3
+//   Bombas 13,14 → TANQUE 1 (único, diesel)
+
+const CTP_TANQUE  = { S: 1, R: 2, D: 3 };
+const CTP_HOST    = 'http://192.168.176.2:81';
+const CTP_SCI     = 'LECTURAS_DE_BOMBA';
+const CTP_URL     = `${CTP_HOST}/CTP/LECTURAS_DE_BOMBA/?script_case_init=${CTP_SCI}`;
+
+// Parámetros detectados del turno activo
+let ctpCtx = null; // { empresa, estacion, caja, dia, turno }
+
+// ── Galones vendidos: Map "TANQUE-BOMBA" → { galones, producto, bomba, tanque }
+function ctpGetGalones() {
+  const map = {};
+  for (let pi = 0; pi < PAIRS; pi++) {
+    const numA = pi * 2 + 2, numB = pi * 2 + 1;
+    ['A','B'].forEach(side => {
+      const bomba = side === 'A' ? numA : numB;
+      PRODUCTS.forEach(p => {
+        const v = parseFloat(ventas[`p${pi}_${side}_${p}`] || 0);
+        if (v > 0) {
+          const gal = v / prices[p];
+          const id  = `${CTP_TANQUE[p]}-${bomba}`;
+          if (map[id]) map[id].galones += gal;
+          else map[id] = { galones: gal, producto: PROD_LABEL[p], bomba, tanque: CTP_TANQUE[p] };
+        }
+      });
+    });
+  }
+  return map;
+}
+
+// ── Abre el modal ─────────────────────────────────────────────────────────
+function openCtpModal() {
+  // Resetear log y status
+  const log = document.getElementById('ctpLog');
+  log.style.display = 'none';
+  log.textContent   = '';
+  document.getElementById('ctpStatus').textContent = '';
+
+  // Render preview de galones
+  const gMap    = ctpGetGalones();
+  const preview = document.getElementById('ctpPreview');
+  const entries = Object.values(gMap);
+  if (!entries.length) {
+    preview.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:8px;">No hay ventas en el turno actual.</div>';
+  } else {
+    const grouped = {};
+    entries.forEach(r => { if (!grouped[r.bomba]) grouped[r.bomba]=[]; grouped[r.bomba].push(r); });
+    preview.innerHTML = Object.keys(grouped).sort((a,b)=>+a-+b).map(b => `
+      <div style="margin-bottom:7px;">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--accent);letter-spacing:1px;margin-bottom:3px;">BOMBA ${b}</div>
+        ${grouped[b].map(r=>`
+          <div style="display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;padding:1px 0;">
+            <span style="color:var(--muted2);">Tanque ${r.tanque} · ${r.producto}</span>
+            <span style="color:var(--green);">+${r.galones.toFixed(3)} gal</span>
+          </div>`).join('')}
+      </div>`).join('<div style="border-top:1px solid var(--border);margin:5px 0;"></div>');
+  }
+
+  // Si ya hay contexto detectado, mostrarlo
+  if (ctpCtx) ctpMostrarCtx();
+
+  document.getElementById('ctpOverlay').classList.add('open');
+}
+
+// ── Muestra el contexto detectado en el modal ─────────────────────────────
+function ctpMostrarCtx() {
+  const box = document.getElementById('ctpDetectInfo');
+  const btn = document.getElementById('ctpSendBtn');
+  if (ctpCtx) {
+    box.innerHTML = `
+      <span style="color:var(--green);">✓ Empresa:</span> ${ctpCtx.empresa} &nbsp;
+      <span style="color:var(--green);">Estación:</span> ${ctpCtx.estacion} &nbsp;
+      <span style="color:var(--green);">Caja:</span> ${ctpCtx.caja}<br>
+      <span style="color:var(--green);">Día:</span> ${ctpCtx.dia} &nbsp;
+      <span style="color:var(--green);">Turno:</span> ${ctpCtx.turno}`;
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+}
+
+// ── Logger ────────────────────────────────────────────────────────────────
+function ctpLog(msg) {
+  const el = document.getElementById('ctpLog');
+  el.style.display = 'block';
+  el.textContent  += `[${new Date().toLocaleTimeString('es-SV')}] ${msg}\n`;
+  el.scrollTop     = el.scrollHeight;
+  console.log(`[CTP] ${msg}`);
+}
+function ctpSetStatus(msg, color) {
+  const el = document.getElementById('ctpStatus');
+  el.textContent = msg;
+  el.style.color = color || 'var(--muted2)';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ── DETECCIÓN AUTOMÁTICA DEL TURNO ACTIVO ────────────────────────────────
+// Flujo:
+//  1. POST accion=buscar con fecha de hoy → obtiene empresa, estacion, caja, dia
+//  2. GET a la página de lecturas con esos params → parsea turno del select/HTML
+// ═══════════════════════════════════════════════════════════════════════════
+async function ctpDetectar() {
+  const btn = document.getElementById('ctpDetectBtn');
+  const box = document.getElementById('ctpDetectInfo');
+  btn.disabled   = true;
+  btn.textContent = '🔍 Detectando...';
+  box.innerHTML   = '<span style="color:var(--super);">Buscando turno activo de hoy...</span>';
+  ctpCtx = null;
+
+  const logEl = document.getElementById('ctpLog');
+  logEl.style.display = 'block';
+  logEl.textContent   = '';
+
+  try {
+    // ── PASO 1: buscar día de hoy ──────────────────────────────────────
+    const hoy = new Date();
+    const fechaStr = `${hoy.getFullYear()}-${String(hoy.getMonth()+1).padStart(2,'0')}-${String(hoy.getDate()).padStart(2,'0')}`;
+    ctpLog(`Buscando día: ${fechaStr}`);
+
+    const fd1 = new FormData();
+    fd1.append('accion', 'buscar');
+    fd1.append('fecha_trabajo', fechaStr);
+
+    const r1 = await fetch(CTP_URL, { method:'POST', credentials:'include', body: fd1 });
+    if (!r1.ok) throw new Error(`HTTP ${r1.status} — ¿Sesión activa? Loguéate primero.`);
+    const txt1 = await r1.text();
+    ctpLog(`Respuesta buscar: ${txt1.substring(0,120)}`);
+
+    let dias;
+    try { dias = JSON.parse(txt1); } catch(e) { throw new Error(`Respuesta no JSON — verifica sesión CTP. Resp: ${txt1.substring(0,80)}`); }
+    if (!dias || !dias.length) throw new Error(`No hay día de trabajo para hoy (${fechaStr}). ¿Turno abierto?`);
+
+    const dia = dias[0];
+    ctpLog(`Día encontrado: ${dia.DESCRIPCION} | empresa=${dia.CODIGO_EMPRESA} caja=${dia.CODIGO_CAJA} dia=${dia.CODIGO_DIA}`);
+
+    // ── PASO 2: obtener turno activo ───────────────────────────────────
+    // La página de lecturas renderiza un <select> de turnos o un hidden con el turno actual.
+    // También se puede leer del max turno buscando la página con esos parámetros.
+    const urlLecturas = `${CTP_URL}&empresa=${dia.CODIGO_EMPRESA}&estacion=${dia.CODIGO_ESTACION}&codigocaja=${dia.CODIGO_CAJA}&codigodia=${dia.CODIGO_DIA}&pagina=1&turno=999`;
+    ctpLog(`Leyendo página de lecturas para detectar turno...`);
+
+    const r2 = await fetch(urlLecturas, { credentials: 'include' });
+    if (!r2.ok) throw new Error(`HTTP ${r2.status} al leer lecturas`);
+    const html2 = await r2.text();
+
+    // Extraer turno activo del HTML
+    const turno = ctpExtraerTurno(html2, dia.CODIGO_DIA);
+    ctpLog(`Turno detectado: ${turno}`);
+
+    // ── PASO 3: verificar que hay lecturas con ese turno ───────────────
+    const urlVerif = `${CTP_URL}&empresa=${dia.CODIGO_EMPRESA}&estacion=${dia.CODIGO_ESTACION}&codigocaja=${dia.CODIGO_CAJA}&codigodia=${dia.CODIGO_DIA}&pagina=1&turno=${turno}`;
+    ctpLog(`Verificando lecturas con turno ${turno}...`);
+    const r3 = await fetch(urlVerif, { credentials:'include' });
+    const html3 = await r3.text();
+    const doc3  = new DOMParser().parseFromString(html3, 'text/html');
+    const nInputs = doc3.querySelectorAll('input[id^="final-"]').length;
+    ctpLog(`Inputs "final-*" encontrados: ${nInputs}`);
+    if (!nInputs) throw new Error(`No se encontraron inputs de lecturas para Turno ${turno}. Verifica que el turno esté abierto.`);
+
+    // ── LISTO ──────────────────────────────────────────────────────────
+    ctpCtx = {
+      empresa:  dia.CODIGO_EMPRESA,
+      estacion: dia.CODIGO_ESTACION,
+      caja:     dia.CODIGO_CAJA,
+      dia:      dia.CODIGO_DIA,
+      turno:    turno
+    };
+    ctpLog(`✓ Contexto listo. ${nInputs} bombas disponibles.`);
+    ctpMostrarCtx();
+    ctpSetStatus(`✓ Turno ${turno} listo — ${nInputs} lecturas`, 'var(--green)');
+
+  } catch(err) {
+    ctpLog(`✗ ERROR: ${err.message}`);
+    ctpSetStatus('✗ Error — ver log', 'var(--danger)');
+    document.getElementById('ctpDetectInfo').innerHTML =
+      `<span style="color:var(--danger);">✗ ${err.message}</span>`;
+  } finally {
+    btn.disabled    = false;
+    btn.textContent = '🔍 Detectar Turno Activo';
+  }
+}
+
+// ── Extrae el turno activo del HTML devuelto ──────────────────────────────
+function ctpExtraerTurno(html, codigoDia) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+
+  // Opción A: hay un <select> con los turnos — buscar el option seleccionado
+  const sel = doc.querySelector('select[name*="turno"], select[id*="turno"]');
+  if (sel && sel.value) {
+    ctpLog(`  Turno desde <select>: ${sel.value}`);
+    return sel.value;
+  }
+
+  // Opción B: buscar en la llamada JS redirect(...) que está en el HTML
+  // redirect(codigoDia, codigoCaja, pagina, estado, empresa, estacion, fecha, ..., turno)
+  const mRedirect = html.match(/redirect\s*\(([^)]+)\)/);
+  if (mRedirect) {
+    const args = mRedirect[1].split(',').map(s => s.trim().replace(/['"]/g,''));
+    // último argumento = turno
+    const turno = args[args.length - 1];
+    if (turno && !isNaN(turno) && parseInt(turno) > 0) {
+      ctpLog(`  Turno desde redirect(): ${turno}`);
+      return turno;
+    }
+  }
+
+  // Opción C: buscar patrón &turno=N en onclick o href del HTML
+  const mTurno = html.match(/[?&]turno=(\d+)/);
+  if (mTurno) {
+    ctpLog(`  Turno desde URL pattern: ${mTurno[1]}`);
+    return mTurno[1];
+  }
+
+  // Opción D: buscar onChangeTurno(... turno) en el HTML
+  const mOCT = html.match(/onChangeTurno\([^,]+,[^,]+,[^,]+,[^,]+,(\d+)/);
+  if (mOCT) {
+    ctpLog(`  Turno desde onChangeTurno: ${mOCT[1]}`);
+    return mOCT[1];
+  }
+
+  // Fallback: asumir turno 1
+  ctpLog('  ⚠ No se detectó turno — asumiendo 1');
+  return '1';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ── ENVÍO PRINCIPAL ───────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+async function ctpEnviar() {
+  if (!ctpCtx) { showToast('Detecta el turno primero', 'error'); return; }
+  const gMap = ctpGetGalones();
+  if (!Object.keys(gMap).length) { showToast('No hay ventas para enviar', 'error'); return; }
+
+  const btn     = document.getElementById('ctpBtn');
+  const sendBtn = document.getElementById('ctpSendBtn');
+  btn.classList.add('working');
+  sendBtn.disabled    = true;
+  sendBtn.textContent = '⌛ Leyendo lecturas...';
+  ctpSetStatus('Conectando...', 'var(--super)');
+
+  try {
+    // ── PASO 1: leer lecturas actuales del CTP ─────────────────────────
+    ctpLog('\n── PASO 1: Leyendo lecturas actuales...');
+    const urlLect = `${CTP_URL}&empresa=${ctpCtx.empresa}&estacion=${ctpCtx.estacion}&codigocaja=${ctpCtx.caja}&codigodia=${ctpCtx.dia}&pagina=1&turno=${ctpCtx.turno}`;
+    const rLect   = await fetch(urlLect, { credentials:'include' });
+    if (!rLect.ok) throw new Error(`HTTP ${rLect.status} al leer lecturas`);
+    const htmlLect = await rLect.text();
+    const actuales = ctpParsearLecturas(htmlLect);
+    ctpLog(`Lecturas actuales: ${Object.keys(actuales).length} filas`);
+
+    // ── PASO 2: calcular nuevos finales ────────────────────────────────
+    ctpLog('\n── PASO 2: Calculando nuevos FINAL...');
+    sendBtn.textContent = '⌛ Calculando...';
+    const lecturasPost = [];
+    let skipped = 0;
+
+    for (const [ctpId, venta] of Object.entries(gMap)) {
+      const actual = actuales[ctpId];
+      if (!actual) {
+        ctpLog(`  ⚠ Bomba ${venta.bomba} Tanque ${venta.tanque} — no en CTP`);
+        skipped++;
+        continue;
+      }
+      const finalActual = parseFloat(actual.final);
+      const nuevoFinal  = finalActual + venta.galones;
+
+      console.log(`[CTP] Bomba ${venta.bomba} | Tanque ${venta.tanque}`);
+      console.log(`[CTP] Lectura actual: ${finalActual.toFixed(3)}`);
+      console.log(`[CTP] Galones vendidos: ${venta.galones.toFixed(3)}`);
+      console.log(`[CTP] Nuevo FINAL: ${nuevoFinal.toFixed(3)}`);
+      ctpLog(`  B${venta.bomba} T${venta.tanque}: ${finalActual.toFixed(3)} + ${venta.galones.toFixed(3)} = ${nuevoFinal.toFixed(3)}`);
+
+      lecturasPost.push({
+        id:       ctpId,
+        final:    nuevoFinal.toFixed(3),
+        calibra:  actual.calibra  || '0',
+        traslado: actual.traslado || '0',
+        inicial:  actual.inicial  || '0',
+        precio:   actual.precio   || '0'
+      });
+    }
+
+    if (!lecturasPost.length) throw new Error('No se pudo calcular ningún FINAL. Revisa el mapeo bomba/tanque.');
+
+    // ── PASO 3: POST guardarLecturas ───────────────────────────────────
+    ctpLog(`\n── PASO 3: Guardando ${lecturasPost.length} lecturas...`);
+    console.log('[CTP] Guardando...');
+    sendBtn.textContent = '⌛ Guardando...';
+
+    const fd = new FormData();
+    fd.append('accion',          'guardarLecturas');
+    fd.append('lecturas',         JSON.stringify(lecturasPost));
+    fd.append('CODIGO_EMPRESA',   ctpCtx.empresa);
+    fd.append('CODIGO_ESTACION',  ctpCtx.estacion);
+    fd.append('CODIGO_CAJA',      ctpCtx.caja);
+    fd.append('CODIGO_DIA',       ctpCtx.dia);
+    fd.append('CODIGO_TURNO',     ctpCtx.turno);
+
+    const rSave = await fetch(CTP_URL, { method:'POST', credentials:'include', body: fd });
+    if (!rSave.ok) throw new Error(`HTTP ${rSave.status} al guardar`);
+    const respTxt = await rSave.text();
+    console.log(`[CTP] Respuesta servidor: ${respTxt}`);
+    ctpLog(`Respuesta: ${respTxt}`);
+
+    const ok = respTxt.toLowerCase().includes('correctamente') || respTxt.toLowerCase().includes('exito');
+    if (ok || rSave.ok) {
+      ctpLog(`✓ GUARDADO EXITOSAMENTE`);
+      const resumen = `✓ ${lecturasPost.length} lecturas enviadas` + (skipped ? ` · ${skipped} omitidas` : '');
+      ctpSetStatus(resumen, 'var(--green)');
+      showToast(`✓ CTP: ${lecturasPost.length} lecturas enviadas`);
+    } else {
+      ctpLog(`⚠ Respuesta inesperada: ${respTxt}`);
+      ctpSetStatus('⚠ Verifica en CTP', 'var(--super)');
+    }
+
+  } catch(err) {
+    ctpLog(`✗ ERROR: ${err.message}`);
+    ctpSetStatus('✗ Error — ver log', 'var(--danger)');
+    showToast('Error CTP — ver modal', 'error');
+    console.error('[CTP]', err);
+  } finally {
+    btn.classList.remove('working');
+    sendBtn.disabled    = false;
+    sendBtn.textContent = '⇑ Actualizar Lecturas en CTP';
+  }
+}
+
+// ── Parsea los inputs final-/calibra-/traslado-/inicial-/precio- del HTML ─
+function ctpParsearLecturas(html) {
+  const doc    = new DOMParser().parseFromString(html, 'text/html');
+  const result = {};
+  doc.querySelectorAll('input[id^="final-"]').forEach(inp => {
+    const parts = inp.id.split('-');           // ["final","TANQUE","BOMBA"]
+    if (parts.length < 3) return;
+    const t = parts[1], b = parts[2];
+    const id = `${t}-${b}`;
+    const gv = (prefix) => {
+      const el = doc.getElementById(`${prefix}-${t}-${b}`);
+      return el ? (el.value || el.textContent || '').trim() : '0';
+    };
+    console.log(`[CTP] Bomba ${b} detectada | Tanque ${t} | Lectura actual: ${inp.value}`);
+    result[id] = { final: inp.value.trim(), calibra: gv('calibra'), traslado: gv('traslado'), inicial: gv('inicial'), precio: gv('precio') };
+  });
+  return result;
+}
+
+// ── delay util ────────────────────────────────────────────────────────────
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FIN MÓDULO CTP
+// ═══════════════════════════════════════════════════════════════════════════
+
+init();
+</script>
+</body>
+</html>
