@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vales Combustible — Exento IVA</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#111; --panel:#1c1c1c; --panel2:#222; --border:#2a2a2a;
+  --gold:#f5c518; --premium:#f5c518; --regular:#42a5f5; --diesel:#66bb6a;
+  --text:#e8e8e8; --muted:#555; --red:#ef5350;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',sans-serif;min-height:100vh;}
+
+header{background:#0a0a0a;border-bottom:3px solid var(--gold);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:4px;color:var(--gold);line-height:1;}
+.logo small{display:block;font-size:10px;letter-spacing:3px;color:var(--muted);margin-top:2px;}
+.header-right{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);text-align:right;}
+.header-right span{display:block;color:var(--text);font-size:13px;}
+
+main{max-width:900px;margin:0 auto;padding:28px 20px;}
+
+.card{background:var(--panel);border:1px solid var(--border);border-radius:4px;margin-bottom:20px;}
+.card-header{padding:10px 18px;background:var(--panel2);border-bottom:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;border-radius:4px 4px 0 0;}
+.card-body{padding:18px;}
+
+.iva-badge{background:#1a2e1a;border:1px solid var(--diesel);border-radius:3px;padding:8px 14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--diesel);letter-spacing:1px;display:inline-flex;align-items:center;gap:8px;}
+.iva-badge .dot{width:8px;height:8px;background:var(--diesel);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* VALE */
+.vale-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.vale-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;white-space:nowrap;}
+.vale-input-wrap{display:flex;align-items:center;gap:6px;}
+.vale-sym{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);}
+#monto{background:#111;border:1px solid var(--border);border-radius:3px;color:var(--gold);font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:700;padding:6px 12px;width:150px;outline:none;transition:border-color .2s;}
+#monto:focus{border-color:var(--gold);}
+
+/* PRECIOS */
+.precios-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:0;}
+.precio-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.precio-card-top{padding:9px 14px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;font-weight:700;color:#111;text-transform:uppercase;}
+.precio-card.premium .precio-card-top{background:var(--premium);}
+.precio-card.regular .precio-card-top{background:var(--regular);}
+.precio-card.diesel  .precio-card-top{background:var(--diesel);}
+.precio-card-body{padding:14px;display:flex;align-items:center;gap:4px;}
+.currency{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--muted);line-height:1;margin-top:2px;}
+.precio-card-body input{background:transparent;border:none;border-bottom:2px solid var(--border);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:30px;font-weight:700;width:100%;outline:none;transition:border-color .2s;}
+.precio-card.premium input:focus{border-color:var(--premium);}
+.precio-card.regular input:focus{border-color:var(--regular);}
+.precio-card.diesel  input:focus{border-color:var(--diesel);}
+
+/* RESULTADOS */
+.resultados-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+.result-card{background:var(--panel);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.result-card-top{padding:9px 14px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;font-weight:700;color:#111;text-transform:uppercase;}
+.result-card.premium .result-card-top{background:var(--premium);}
+.result-card.regular .result-card-top{background:var(--regular);}
+.result-card.diesel  .result-card-top{background:var(--diesel);}
+.result-body{padding:16px 14px 14px;}
+.gal-value{font-family:'IBM Plex Mono',monospace;font-size:42px;font-weight:700;line-height:1;}
+.result-card.premium .gal-value{color:var(--premium);}
+.result-card.regular .gal-value{color:var(--regular);}
+.result-card.diesel  .gal-value{color:var(--diesel);}
+.gal-unit{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);margin-top:3px;text-transform:uppercase;}
+.result-detail{margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);line-height:1.8;}
+.result-detail strong{color:var(--text);font-size:12px;}
+
+/* TABLA */
+.tabla-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-family:'IBM Plex Mono',monospace;font-size:13px;}
+th{background:var(--panel2);color:var(--muted);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:#1f1f1f;}
+.tag-p{color:var(--premium);font-weight:700;}
+.tag-r{color:var(--regular);font-weight:700;}
+.tag-d{color:var(--diesel);font-weight:700;}
+
+/* BOTONES */
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.btn{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;border:none;border-radius:3px;padding:10px 20px;cursor:pointer;transition:all .15s;}
+.btn-gold{background:var(--gold);color:#111;font-weight:700;}
+.btn-gold:hover{background:#e6b800;}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.btn-outline:hover{border-color:var(--text);color:var(--text);}
+
+/* HISTORIAL */
+.historial-list{display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto;}
+.hist-item{background:var(--panel2);border:1px solid var(--border);border-radius:3px;padding:10px 14px;font-family:'IBM Plex Mono',monospace;font-size:11px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.hist-item-left{color:var(--muted);line-height:1.6;}
+.hist-item-left strong{color:var(--text);font-size:12px;}
+.hist-item-right{display:flex;gap:10px;font-size:12px;}
+.hist-p{color:var(--premium);}
+.hist-r{color:var(--regular);}
+.hist-d{color:var(--diesel);}
+.hist-del{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0 4px;line-height:1;transition:color .15s;}
+.hist-del:hover{color:var(--red);}
+.empty-state{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);text-align:center;padding:24px;letter-spacing:1px;}
+
+@media(max-width:620px){
+  .precios-grid,.resultados-grid{grid-template-columns:1fr;}
+  header{padding:14px 16px;}
+  main{padding:16px 12px;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">GRUPO RVQ<small>VALES DE COMBUSTIBLE — EXENTO IVA</small></div>
+  <div class="header-right">FECHA <span id="fechaHoy">—</span></div>
+</header>
+
+<main>
+
+  <!-- VALE -->
+  <div class="card">
+    <div class="card-header">🎫 Valor del Vale</div>
+    <div class="card-body">
+      <div class="vale-row">
+        <span class="vale-label">Monto</span>
+        <div class="vale-input-wrap">
+          <span class="vale-sym">$</span>
+          <input type="number" id="monto" value="20" step="1" min="1" oninput="calcular()">
+        </div>
+        <div class="iva-badge"><span class="dot"></span>EXENTO DE IVA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRECIOS -->
+  <div class="card">
+    <div class="card-header">⛽ Precio del Galón Este Día</div>
+    <div class="card-body">
+      <div class="precios-grid">
+        <div class="precio-card premium">
+          <div class="precio-card-top">⭐ Premium / Super</div>
+          <div class="precio-card-body">
+            <span class="currency">$</span>
+            <input type="number" id="precioP" value="4.74" step="0.01" min="0" oninput="calcular()">
+          </div>
+        </div>
+        <div class="precio-card regular">
+          <div class="precio-card-top">🔵 Regular</div>
+          <div class="precio-card-body">
+            <span class="currency">$</span>
+            <input type="number" id="precioR" value="4.41" step="0.01" min="0" oninput="calcular()">
+          </div>
+        </div>
+        <div class="precio-card diesel">
+          <div class="precio-card-top">🟢 Diesel</div>
+          <div class="precio-card-body">
+            <span class="currency">$</span>
+            <input type="number" id="precioD" value="4.44" step="0.01" min="0" oninput="calcular()">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTADOS -->
+  <div class="card">
+    <div class="card-header">📊 Galones a Suministrar</div>
+    <div class="card-body">
+      <div class="resultados-grid">
+        <div class="result-card premium">
+          <div class="result-card-top">⭐ Premium / Super</div>
+          <div class="result-body">
+            <div class="gal-value" id="galP">—</div>
+            <div class="gal-unit">Galones</div>
+            <div class="result-detail">Total en bomba: <strong id="totalP">—</strong></div>
+          </div>
+        </div>
+        <div class="result-card regular">
+          <div class="result-card-top">🔵 Regular</div>
+          <div class="result-body">
+            <div class="gal-value" id="galR">—</div>
+            <div class="gal-unit">Galones</div>
+            <div class="result-detail">Total en bomba: <strong id="totalR">—</strong></div>
+          </div>
+        </div>
+        <div class="result-card diesel">
+          <div class="result-card-top">🟢 Diesel</div>
+          <div class="result-body">
+            <div class="gal-value" id="galD">—</div>
+            <div class="gal-unit">Galones</div>
+            <div class="result-detail">Total en bomba: <strong id="totalD">—</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabla-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Precio bomba</th>
+              <th>Vale ($)</th>
+              <th>Galones</th>
+              <th>Total bomba</th>
+            </tr>
+          </thead>
+          <tbody id="tablaBody"></tbody>
+        </table>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-gold" onclick="guardarRegistro()">💾 Guardar registro</button>
+        <button class="btn btn-outline" onclick="window.print()">🖨 Imprimir</button>
+        <button class="btn btn-outline" onclick="exportarCSV()">📥 Exportar CSV</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div class="card">
+    <div class="card-header">📋 Historial de Precios Guardados</div>
+    <div class="card-body">
+      <div id="historialList" class="historial-list">
+        <div class="empty-state">— Sin registros guardados —</div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-outline" onclick="limpiarHistorial()">🗑 Limpiar historial</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+document.getElementById('fechaHoy').textContent = new Date().toLocaleDateString('es-SV');
+
+function calcular() {
+  var pP = parseFloat(document.getElementById('precioP').value);
+  var pR = parseFloat(document.getElementById('precioR').value);
+  var pD = parseFloat(document.getElementById('precioD').value);
+  var monto = parseFloat(document.getElementById('monto').value);
+
+  if (isNaN(pP) || pP <= 0) pP = 0;
+  if (isNaN(pR) || pR <= 0) pR = 0;
+  if (isNaN(pD) || pD <= 0) pD = 0;
+  if (isNaN(monto) || monto <= 0) monto = 0;
+
+  var R2 = function(n){ return Math.round(n * 100) / 100; };
+  var gP = pP > 0 ? R2(monto * 1.12 / pP) : 0;
+  var gR = pR > 0 ? R2(monto * 1.12 / pR) : 0;
+  var gD = pD > 0 ? R2(monto * 1.12 / pD) : 0;
+
+  document.getElementById('galP').textContent = gP > 0 ? gP.toFixed(2) : '—';
+  document.getElementById('galR').textContent = gR > 0 ? gR.toFixed(2) : '—';
+  document.getElementById('galD').textContent = gD > 0 ? gD.toFixed(2) : '—';
+
+  document.getElementById('totalP').textContent = gP > 0 ? '$ ' + (gP * pP).toFixed(2) : '—';
+  document.getElementById('totalR').textContent = gR > 0 ? '$ ' + (gR * pR).toFixed(2) : '—';
+  document.getElementById('totalD').textContent = gD > 0 ? '$ ' + (gD * pD).toFixed(2) : '—';
+
+  var filas = [
+    ['Premium / Super', pP, monto, gP, 'tag-p'],
+    ['Regular',         pR, monto, gR, 'tag-r'],
+    ['Diesel',          pD, monto, gD, 'tag-d']
+  ];
+  document.getElementById('tablaBody').innerHTML = filas.map(function(f) {
+    return '<tr>' +
+      '<td class="' + f[4] + '">' + f[0] + '</td>' +
+      '<td>$ ' + f[1].toFixed(2) + '</td>' +
+      '<td>$ ' + f[2].toFixed(2) + '</td>' +
+      '<td><strong>' + (f[3] > 0 ? f[3].toFixed(2) : '—') + '</strong></td>' +
+      '<td>$ ' + (f[3] > 0 ? (f[3] * f[1]).toFixed(2) : '—') + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function getHistorial() {
+  try { return JSON.parse(localStorage.getItem('rvq_historial') || '[]'); } catch(e) { return []; }
+}
+function saveHistorial(h) { localStorage.setItem('rvq_historial', JSON.stringify(h)); }
+
+function guardarRegistro() {
+  var pP = parseFloat(document.getElementById('precioP').value) || 0;
+  var pR = parseFloat(document.getElementById('precioR').value) || 0;
+  var pD = parseFloat(document.getElementById('precioD').value) || 0;
+  var monto = parseFloat(document.getElementById('monto').value) || 0;
+
+  var reg = {
+    id: Date.now(),
+    fecha: new Date().toLocaleDateString('es-SV'),
+    monto: monto,
+    precioP: pP, precioR: pR, precioD: pD,
+    galP: pP > 0 ? (monto / pP).toFixed(2) : '—',
+    galR: pR > 0 ? (monto / pR).toFixed(2) : '—',
+    galD: pD > 0 ? (monto / pD).toFixed(2) : '—'
+  };
+  var h = getHistorial();
+  h.unshift(reg);
+  saveHistorial(h);
+  renderHistorial();
+}
+
+function eliminarRegistro(id) {
+  saveHistorial(getHistorial().filter(function(r){ return r.id !== id; }));
+  renderHistorial();
+}
+
+function limpiarHistorial() {
+  if (confirm('¿Eliminar todo el historial?')) {
+    localStorage.removeItem('rvq_historial');
+    renderHistorial();
+  }
+}
+
+function renderHistorial() {
+  var h = getHistorial();
+  var el = document.getElementById('historialList');
+  if (!h.length) { el.innerHTML = '<div class="empty-state">— Sin registros guardados —</div>'; return; }
+  el.innerHTML = h.map(function(r) {
+    return '<div class="hist-item">' +
+      '<div class="hist-item-left"><strong>' + r.fecha + '</strong> — Vale: $ ' + r.monto.toFixed(2) + '</div>' +
+      '<div class="hist-item-right">' +
+        '<span class="hist-p">⭐ ' + r.galP + ' gal @ $' + r.precioP + '</span>' +
+        '<span class="hist-r">🔵 ' + r.galR + ' gal @ $' + r.precioR + '</span>' +
+        '<span class="hist-d">🟢 ' + r.galD + ' gal @ $' + r.precioD + '</span>' +
+      '</div>' +
+      '<button class="hist-del" onclick="eliminarRegistro(' + r.id + ')">✕</button>' +
+    '</div>';
+  }).join('');
+}
+
+calcular();
+renderHistorial();
+</script>
+</body>
+</html>
